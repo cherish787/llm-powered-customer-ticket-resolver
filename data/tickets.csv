@@ -1,0 +1,11 @@
+id,query,intent,resolution
+1,"How do I reset my account password?",Password Reset,"Go to Settings > Security > Reset Password and follow the email instructions."
+2,"I haven't received my order yet. It's been 5 days.",Order Tracking,"Check your email for the tracking number or visit the 'My Orders' section in your profile."
+3,"Can I get a refund for my last purchase?",Refund Request,"Refunds can be requested within 30 days of purchase via the billing portal."
+4,"My app keeps crashing when I open the settings.",Technical Issue,"Try clearing the app cache or reinstalling the application from the App Store."
+5,"How do I change my subscription plan?",Subscription Management,"Navigate to Billing > Subscription and select 'Change Plan' to see available options."
+6,"Is there a way to update my shipping address?",Profile Update,"You can update your address in the Profile > Personal Information section before the order is shipped."
+7,"Do you offer international shipping to Europe?",Shipping Inquiry,"Yes, we ship to most European countries. Shipping fees and times vary by location."
+8,"I forgot my username. How can I recover it?",Account Recovery,"Click on 'Forgot Username' on the login page and enter your registered email address."
+9,"How can I contact customer support via phone?",Contact Inquiry,"Our phone support is available at +1-800-123-4567 from 9 AM to 5 PM EST."
+10,"Why was I charged twice for my subscription?",Billing Dispute,"This may be a temporary authorization hold. Please contact our billing team with your invoice ID for a manual review."
