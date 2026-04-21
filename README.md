@@ -1,57 +1,62 @@
-# LLM-Powered Support Query Understanding (RAG)
-
-A minimal but realistic implementation of a Retrieval-Augmented Generation (RAG) pipeline for customer support tickets using Python, FAISS, and OpenAI.
-
-## Architecture
-The system follows a classic RAG architecture:
-1.  **Ingestion**: Synthetic support tickets are loaded from `data/tickets.csv`.
-2.  **Embeddings**: Text is vectorized using `sentence-transformers` (`all-MiniLM-L6-v2`).
-3.  **Retrieval**: Vectors are stored in a `FAISS` index for fast similarity search.
-4.  **Prompt Engineering**: Supports Zero-shot and Few-shot (retrieved examples) strategies.
-5.  **LLM Pipeline**: Generates intent, summary, and response suggestions.
-6.  **Evaluation**: Includes cosine similarity and basic hallucination detection.
-
-## Project Structure
-- `data/`: CSV data and FAISS index storage.
-- `src/`: Moduloar logic for embeddings, retrieval, prompts, etc.
-- `app/`: FastAPI application.
-- `requirements.txt`: Project dependencies.
-
-## Setup
-1.  Install dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
-2.  Set up environment variables (Optional):
-    Create a `.env` file and add:
-    ```env
-    OPENAI_API_KEY=your_key_here
-    ```
-    *If no key is provided, the system defaults to a Mock mode for demonstration.*
-
-3.  Run the API:
-    ```bash
-    uvicorn app.main:app --reload
-    ```
-
-## API Endpoints
-- `GET /retrieve?q=query&k=3`: Returns top-k similar tickets.
-- `GET /predict?q=query&strategy=few-shot`: Returns intent, summary, and response suggestion.
-
-## Tradeoffs
-- **Latency vs Accuracy**: Using a local small embedding model (`all-MiniLM-L6-v2`) provides low latency but may be less nuanced than larger models (e.g., `text-embedding-3-small`).
-- **FAISS (CPU)**: extremely fast for small datasets, but doesn't handle real-time metadata updates as easily as managed vector databases.
-
-## Sample Input/Output
-**Input**: `GET /predict?q=I can't log in`
-**Output** (Structured JSON):
-```json
+LLM-Powered Support Query Understanding (RAG)
+This project is a lightweight implementation of a Retrieval-Augmented Generation (RAG) pipeline for handling customer support queries. The goal was to explore how combining semantic search with LLMs can improve intent detection, summarization, and response generation.
+Overview
+The system takes a user query, retrieves similar past tickets using embeddings, and uses that context to generate structured outputs like intent, summary, and a suggested response.
+It’s intentionally kept simple—no heavy infra—just enough to understand how RAG systems work end-to-end.
+How it works
+Data ingestion
+Loads a small dataset of support tickets from data/tickets.csv (synthetic for now)
+Embeddings
+Uses Sentence Transformers (all-MiniLM-L6-v2) to convert text into vectors
+Retrieval
+Stores embeddings in a FAISS index and retrieves top-k similar tickets for a given query
+Prompting
+Supports:
+Zero-shot (direct query to LLM)
+Few-shot (injecting retrieved examples into the prompt)
+LLM layer
+Generates:
+intent
+short summary
+response suggestion
+Uses OpenAI API if available, otherwise falls back to a mock mode
+Evaluation (basic)
+Includes simple checks like:
+cosine similarity between outputs
+heuristic-based hallucination detection
+Project structure
+data/        # dataset + FAISS index
+src/         # core logic (embeddings, retrieval, prompts, etc.)
+app/         # FastAPI app
+notebooks/   # experiments (optional)
+Running the project
+Install dependencies:
+pip install -r requirements.txt
+(Optional) Add your API key:
+OPENAI_API_KEY=your_key_here
+Start the server:
+uvicorn app.main:app --reload
+API
+Retrieve similar tickets
+GET /retrieve?q=your_query&k=3
+Run full pipeline (intent + summary + response)
+GET /predict?q=your_query&strategy=few-shot
+Notes / Trade-offs
+Using all-MiniLM-L6-v2 keeps things fast and lightweight, but it’s not as expressive as larger embedding models
+FAISS works well for this scale, but for dynamic or large datasets, a managed vector DB would make more sense
+Prompt design has a noticeable impact—few-shot generally performs better, but adds latency
+Example
+Input
+GET /predict?q=I can't log in
+Output
 {
-  "query": "I can't log in",
-  "prediction": {
-    "intent": "Account Access",
-    "summary": "User is unable to log into their account.",
-    "response": "Reset your password via the login page or contact support if the issue persists."
-  }
+  "intent": "Account Access",
+  "summary": "User is unable to log into their account.",
+  "response": "Try resetting your password or contact support if the issue continues."
 }
-```
+Why I built this
+Mostly to get hands-on with:
+RAG workflows
+prompt design (zero-shot vs few-shot)
+practical limitations like latency vs output quality
+It’s not meant to be production-ready, just a clean implementation of the core ideas.
