@@ -26,17 +26,13 @@ Project structure
 data/        # dataset + FAISS index
 src/         # core logic (embeddings, retrieval, prompts, etc.)
 app/         # FastAPI app
-notebooks/   # experiments (optional)
+
 
 
 Running the project
 Install dependencies:
 
 pip install -r requirements.txt
-
-(Optional) Add your API key:
-
-OPENAI_API_KEY=your_key_here
 
 Start the server:
 
@@ -53,7 +49,7 @@ Run full pipeline (intent + summary + response)
 GET /predict?q=your_query&strategy=few-shot
 
 
-Notes / Trade-offs
+Notes 
 	•	Using all-MiniLM-L6-v2 keeps things fast and lightweight, but it’s not as expressive as larger embedding models
 	•	FAISS works well for this scale, but for dynamic or large datasets, a managed vector DB would make more sense
 	•	Prompt design has a noticeable impact—few-shot generally performs better, but adds latency
@@ -71,10 +67,3 @@ Output
   "response": "Try resetting your password or contact support if the issue continues."
 }
 
-
-Why I built this
-Mostly to get hands-on with:
-	•	RAG workflows
-	•	prompt design (zero-shot vs few-shot)
-	•	practical limitations like latency vs output quality
-It’s not meant to be production-ready, just a clean implementation of the core ideas.
