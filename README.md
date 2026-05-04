@@ -9,7 +9,7 @@ The system retrieves similar historical support tickets using embeddings and use
 
 This project focuses on understanding the full RAG workflow end-to-end without introducing unnecessary infrastructure or complexity.
 
-⸻
+
 
 What This Project Does
 
@@ -24,7 +24,7 @@ Given a customer support query, the pipeline:
 
 The implementation is intentionally lightweight and designed for experimentation, learning, and rapid iteration.
 
-⸻
+
 
 Features
 	•	Semantic search using Sentence Transformers
@@ -35,7 +35,7 @@ Features
 	•	OpenAI integration with fallback mock mode
 	•	Basic evaluation utilities for output quality checks
 
-⸻
+
 
 Tech Stack
 
@@ -47,7 +47,7 @@ Backend	FastAPI
 Language	Python
 
 
-⸻
+
 
 How the Pipeline Works
 
@@ -59,7 +59,7 @@ data/tickets.csv
 
 The dataset is synthetic for experimentation purposes.
 
-⸻
+
 
 2. Embedding Generation
 
@@ -69,7 +69,7 @@ all-MiniLM-L6-v2
 
 This model is lightweight, fast, and works well for semantic similarity tasks.
 
-⸻
+
 
 3. Retrieval
 
@@ -80,7 +80,7 @@ For every incoming query:
 	•	Top-k similar tickets are retrieved
 	•	Retrieved examples are passed into the prompt context
 
-⸻
+
 
 4. Prompting Strategies
 
@@ -96,7 +96,7 @@ Adds retrieved support examples into the prompt before generation.
 
 Few-shot prompting generally improves output quality, especially for intent detection and response consistency.
 
-⸻
+
 
 5. Response Generation
 
@@ -114,7 +114,7 @@ Example:
 }
 
 
-⸻
+
 
 Project Structure
 
@@ -126,7 +126,7 @@ Project Structure
 └── README.md
 
 
-⸻
+
 
 Installation
 
@@ -135,7 +135,7 @@ Clone the repository and install dependencies:
 pip install -r requirements.txt
 
 
-⸻
+
 
 Running the Application
 
@@ -148,7 +148,7 @@ Server will run locally at:
 http://127.0.0.1:8000
 
 
-⸻
+
 
 API Endpoints
 
@@ -163,7 +163,7 @@ Example
 GET /retrieve?q=password reset&k=3
 
 
-⸻
+
 
 Run Full RAG Pipeline
 
@@ -176,7 +176,7 @@ Example
 GET /predict?q=I can't log in&strategy=few-shot
 
 
-⸻
+
 
 Evaluation
 
@@ -187,7 +187,7 @@ The project includes lightweight evaluation utilities such as:
 
 These are mainly intended for experimentation rather than production benchmarking.
 
-⸻
+
 
 Design Decisions
 
@@ -201,7 +201,7 @@ Chosen because it is:
 
 Larger embedding models may improve retrieval quality but increase latency and resource usage.
 
-⸻
+
 
 Why FAISS?
 
@@ -215,7 +215,7 @@ For production-scale systems, a managed vector database such as:
 
 would likely be more suitable.
 
-⸻
+
 
 Future Improvements
 
@@ -229,7 +229,7 @@ Possible next steps:
 	•	Docker deployment
 	•	Vector DB integration
 
-⸻
+
 
 Learning Goals Behind This Project
 
@@ -242,7 +242,7 @@ This project was primarily built to understand:
 
 The focus is more on clarity and experimentation than production optimization.
 
-⸻
+
 
 Example Workflow
 
