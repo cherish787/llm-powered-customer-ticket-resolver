@@ -1,60 +1,251 @@
 LLM-Powered Support Query Understanding (RAG)
-This project is a lightweight implementation of a Retrieval-Augmented Generation (RAG) pipeline for handling customer support queries. The goal was to explore how combining semantic search with LLMs can improve intent detection, summarization, and response generation.
 
-Overview
-The system takes a user query, retrieves similar past tickets using embeddings, and uses that context to generate structured outputs like intent, summary, and a suggested response.
-It’s intentionally kept simple—no heavy infra—just enough to understand how RAG systems work end-to-end.
+A lightweight Retrieval-Augmented Generation (RAG) project built to explore how semantic search and LLMs can work together for customer support automation.
 
-How it works
-	•	Data ingestion Loads a small dataset of support tickets from data/tickets.csv (synthetic for now)
-	•	Embeddings Uses Sentence Transformers (all-MiniLM-L6-v2) to convert text into vectors
-	•	Retrieval Stores embeddings in a FAISS index and retrieves top-k similar tickets for a given query
-	•	Prompting Supports:
-	◦	Zero-shot (direct query to LLM)
-	◦	Few-shot (injecting retrieved examples into the prompt)
-	•	LLM layer Generates:
-	◦	intent
-	◦	short summary
-	◦	response suggestion
-	•	Uses OpenAI API if available, otherwise falls back to a mock mode
-	•	Evaluation (basic) Includes simple checks like:
-	◦	cosine similarity between outputs
-	◦	heuristic-based hallucination detection
+The system retrieves similar historical support tickets using embeddings and uses that context to generate structured outputs such as:
+	•	Intent classification
+	•	Query summarization
+	•	Suggested support responses
 
-Project structure
+This project focuses on understanding the full RAG workflow end-to-end without introducing unnecessary infrastructure or complexity.
 
-data/        # dataset + FAISS index
-src/         # core logic (embeddings, retrieval, prompts, etc.)
-app/         # FastAPI app
+⸻
+
+What This Project Does
+
+Given a customer support query, the pipeline:
+	1.	Converts the query into embeddings
+	2.	Retrieves the most relevant past tickets using vector similarity
+	3.	Injects retrieved context into an LLM prompt
+	4.	Generates:
+	•	User intent
+	•	Short issue summary
+	•	Suggested response
+
+The implementation is intentionally lightweight and designed for experimentation, learning, and rapid iteration.
+
+⸻
+
+Features
+	•	Semantic search using Sentence Transformers
+	•	FAISS-based vector retrieval
+	•	Zero-shot and few-shot prompting support
+	•	Structured response generation
+	•	FastAPI API endpoints
+	•	OpenAI integration with fallback mock mode
+	•	Basic evaluation utilities for output quality checks
+
+⸻
+
+Tech Stack
+
+Component	Technology
+Embeddings	Sentence Transformers (all-MiniLM-L6-v2)
+Vector Search	FAISS
+LLM	OpenAI API / Mock fallback
+Backend	FastAPI
+Language	Python
 
 
+⸻
 
-Running the project
-Install dependencies:
+How the Pipeline Works
+
+1. Data Ingestion
+
+Loads support tickets from:
+
+data/tickets.csv
+
+The dataset is synthetic for experimentation purposes.
+
+⸻
+
+2. Embedding Generation
+
+Each ticket is converted into vector embeddings using:
+
+all-MiniLM-L6-v2
+
+This model is lightweight, fast, and works well for semantic similarity tasks.
+
+⸻
+
+3. Retrieval
+
+Embeddings are stored in a FAISS index.
+
+For every incoming query:
+	•	The query is embedded
+	•	Top-k similar tickets are retrieved
+	•	Retrieved examples are passed into the prompt context
+
+⸻
+
+4. Prompting Strategies
+
+The project supports two prompting approaches:
+
+Zero-Shot
+
+Directly sends the query to the LLM.
+
+Few-Shot
+
+Adds retrieved support examples into the prompt before generation.
+
+Few-shot prompting generally improves output quality, especially for intent detection and response consistency.
+
+⸻
+
+5. Response Generation
+
+The LLM generates:
+	•	Intent
+	•	Summary
+	•	Suggested Support Response
+
+Example:
+
+{
+  "intent": "Account Access",
+  "summary": "User is unable to log into their account.",
+  "response": "Try resetting your password or contact support if the issue continues."
+}
+
+
+⸻
+
+Project Structure
+
+.
+├── data/          # Dataset + FAISS index
+├── src/           # Core RAG pipeline logic
+├── app/           # FastAPI application
+├── requirements.txt
+└── README.md
+
+
+⸻
+
+Installation
+
+Clone the repository and install dependencies:
 
 pip install -r requirements.txt
 
-Start the server:
+
+⸻
+
+Running the Application
+
+Start the FastAPI server:
 
 uvicorn app.main:app --reload
 
+Server will run locally at:
 
-API
-Retrieve similar tickets
+http://127.0.0.1:8000
+
+
+⸻
+
+API Endpoints
+
+Retrieve Similar Tickets
+
+Returns top-k semantically similar support tickets.
 
 GET /retrieve?q=your_query&k=3
 
-Run full pipeline (intent + summary + response)
+Example
+
+GET /retrieve?q=password reset&k=3
+
+
+⸻
+
+Run Full RAG Pipeline
+
+Generates intent, summary, and response.
 
 GET /predict?q=your_query&strategy=few-shot
 
-
-Notes 
-	•	Using all-MiniLM-L6-v2 keeps things fast and lightweight, but it’s not as expressive as larger embedding models
-	•	FAISS works well for this scale, but for dynamic or large datasets, a managed vector DB would make more sense
-	•	Prompt design has a noticeable impact—few-shot generally performs better, but adds latency
-
 Example
+
+GET /predict?q=I can't log in&strategy=few-shot
+
+
+⸻
+
+Evaluation
+
+The project includes lightweight evaluation utilities such as:
+	•	Cosine similarity checks
+	•	Simple hallucination heuristics
+	•	Output consistency validation
+
+These are mainly intended for experimentation rather than production benchmarking.
+
+⸻
+
+Design Decisions
+
+Why all-MiniLM-L6-v2?
+
+Chosen because it is:
+	•	Fast
+	•	Lightweight
+	•	Easy to run locally
+	•	Good enough for semantic retrieval tasks
+
+Larger embedding models may improve retrieval quality but increase latency and resource usage.
+
+⸻
+
+Why FAISS?
+
+FAISS is simple and efficient for small-to-medium scale vector search.
+
+For production-scale systems, a managed vector database such as:
+	•	Pinecone
+	•	Weaviate
+	•	Qdrant
+	•	Milvus
+
+would likely be more suitable.
+
+⸻
+
+Future Improvements
+
+Possible next steps:
+	•	Better evaluation metrics
+	•	Streaming responses
+	•	Hybrid search (BM25 + embeddings)
+	•	Reranking models
+	•	Conversation memory
+	•	Real support ticket datasets
+	•	Docker deployment
+	•	Vector DB integration
+
+⸻
+
+Learning Goals Behind This Project
+
+This project was primarily built to understand:
+	•	How RAG pipelines work internally
+	•	Embedding-based retrieval
+	•	Prompt engineering tradeoffs
+	•	Few-shot vs zero-shot generation
+	•	LLM orchestration patterns
+
+The focus is more on clarity and experimentation than production optimization.
+
+⸻
+
+Example Workflow
+
 Input
 
 GET /predict?q=I can't log in
@@ -67,3 +258,9 @@ Output
   "response": "Try resetting your password or contact support if the issue continues."
 }
 
+
+⸻
+
+License
+
+MIT License
