@@ -3,7 +3,7 @@ LLM-Powered Support Query Understanding (RAG)
 A lightweight Retrieval-Augmented Generation (RAG) project built to explore how semantic search and LLMs can work together for customer support automation.
 
 The system retrieves similar historical support tickets using embeddings and uses that context to generate structured outputs such as:
-	•	Intent classification,
+	•	Intent classification
 	•	Query summarization
 	•	Suggested support responses
 
