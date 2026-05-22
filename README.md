@@ -20,7 +20,7 @@ Given a customer support query, the pipeline:
 	4.	Generates:
 	•	User intent
 	•	Short issue summary
-	•	Suggested response
+	•	Suggested responses
 
 The implementation is intentionally lightweight and designed for experimentation, learning, and rapid iteration.
 
