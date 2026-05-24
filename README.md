@@ -5,7 +5,7 @@ A lightweight Retrieval-Augmented Generation (RAG) project built to explore how 
 The system retrieves similar historical support tickets using embeddings and uses that context to generate structured outputs such as:
 	•	Intent classification
 	•	Query summarization
-	•	Suggested support responses
+	•	Suggested support responsess
 
 This project focuses on understanding the full RAG workflow end-to-end without introducing unnecessary infrastructure or complexity.
 
