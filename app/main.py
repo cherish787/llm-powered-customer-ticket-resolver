@@ -28,7 +28,7 @@ def startup_event():
     dimension = sample_emb.shape[1]
     vector_store = VectorStore(dimension)
 
-    # Build index if metadata doesn't exist
+    # Build index if metadata doesn't exists
     if not os.path.exists(f"{{INDEX_PATH}}.metadata"):
         print("Building FAISS index...")
         embeddings = embedding_engine.get_embeddings(df["cleaned_query"].tolist())
